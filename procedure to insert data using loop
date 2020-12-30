@@ -1,0 +1,10 @@
+create or replace procedure add_data
+is
+begin
+ for i in 1..50 loop
+  insert into asdf values (i);
+ end loop;
+ dbms_output.put_line('ok');
+end add_data;
+
+exec add_data;

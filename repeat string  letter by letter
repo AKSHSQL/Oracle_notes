@@ -37,3 +37,33 @@ begin
     end loop;
     str:=null;
 end rep_str;
+
+
+
+--for two different strings
+
+create or replace procedure rep_str (str1 in varchar2,str2 in varchar2)
+is
+str varchar2(1000);
+len number;
+begin
+   len := length(str1);
+   for i in 1..len loop
+    for j in 1..i loop
+    str:=substr(str1,1,i);
+    end loop;
+    dbms_output.put_line(str);
+    end loop;
+    str:=null;
+    
+   len := length(str2);
+   for i in reverse 1..len loop
+    for j in 1..i loop
+    str:=substr(str2,1,i);
+    end loop;
+    dbms_output.put_line(str);
+    end loop;
+    str:=null;
+end rep_str;
+
+exec rep_str('str1','str2');

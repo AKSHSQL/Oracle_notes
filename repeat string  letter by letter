@@ -120,3 +120,23 @@ begin
 end rep_str;
 
 exec rep_str('END_2020','START_2021');
+
+
+
+--Actual xmax tree pattern
+create or replace procedure rep_str (str2 in varchar2)
+is
+str varchar2(1000);
+len number;
+begin
+     len := length(str2);
+   for i in 1..len loop
+    for j in 1..i loop
+    str:=lpad(substr(str2,1,i),12,' ')||rpad(substr(str2,1,i),12,' ');
+    end loop;
+    dbms_output.put_line(str);
+    end loop;
+    str:=null;
+end rep_str;           
+
+exec rep_str('xxxxxxxxxx');

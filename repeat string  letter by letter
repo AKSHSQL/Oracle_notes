@@ -94,3 +94,29 @@ begin
 end rep_str;
 
 exec rep_str('END_2020','START_2021');
+
+--another one
+create or replace procedure rep_str (str1 in varchar2,str2 in varchar2)
+is
+str varchar2(1000);
+len number;
+begin
+   len := length(str1);
+   for i in reverse 1..len loop
+    for j in 1..i loop
+    str:=lpad(substr(str1,1,i),12,'*')||rpad(substr(str1,1,i),12,'*');
+    end loop;
+    dbms_output.put_line(str);
+    end loop;
+    str:=null;
+       len := length(str2);
+   for i in 1..len loop
+    for j in 1..i loop
+    str:=lpad(substr(str2,1,i),12,'*')||rpad(substr(str2,1,i),12,'*');
+    end loop;
+    dbms_output.put_line(str);
+    end loop;
+    str:=null;
+end rep_str;
+
+exec rep_str('END_2020','START_2021');

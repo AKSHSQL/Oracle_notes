@@ -1,0 +1,8 @@
+
+ 
+insert all data from one column into another column using update clause
+
+update mp_dispute_summary
+set retailer_id = wt.retailer_id from wph_transactions wt (nolock)
+inner join mp_dispute_summary
+on ca_term_id = tid

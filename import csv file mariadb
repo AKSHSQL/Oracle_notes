@@ -1,0 +1,12 @@
+
+--import csv file into mariadb
+
+LOAD DATA LOCAL INFILE 
+'/home/akshay/europadev csv/CMS_User_202101251324.csv'
+INTO TABLE CMS_User
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+
+

@@ -1,0 +1,9 @@
+DELIMITER $$
+CREATE FUNCTION getCurrentDate()
+ RETURNS datetime
+  no sql
+ DETERMINISTIC
+BEGIN
+ RETURN now();    --get current datetime
+END $$
+DELIMITER ;

@@ -1,0 +1,53 @@
+drop function if exists luhn;
+drop function if exists luhn_check;
+
+delimiter //
+
+-- Function that calculates a Luhn (mod 10) check digit from a numeric string.
+-- The behavior is undefined if the string contains anything else than digits.
+-- Assumes that the string does not have a check digit added yet, so it starts
+-- with a weight of 2 at the last digit.
+create function luhn(p_number varchar(31))
+    returns char(1)
+    sql security invoker
+begin
+    declare i, mysum, r, weight int;
+
+    set weight = 2;
+    set mysum = 0;
+    set i = length(p_number);
+
+    while i > 0 do
+        set r = substring(p_number, i, 1) * weight;
+        set mysum = mysum + if(r > 9, r - 9, r);
+        set i = i - 1;
+        set weight = 3 - weight;
+    end while;
+
+    return (10 - mysum % 10) % 10;
+end //
+---------------------------------------------------------------------
+-- Add a check digit to an existing number.
+create function luhn_add(p_number varchar(32))
+    returns varchar(33)
+    sql security invoker
+begin
+    declare luhn_number char(1);
+    return concat(p_number, luhn(p_number));
+end //
+----------------------------------------------------------------------------------
+-- Check if a numeric string has a valid check digit. Does this by cutting off
+-- the last digit, recalculating the Luhn check digit, and comparing the strings.
+create function luhn_check(p_number varchar(32))
+    returns boolean
+    sql security invoker
+begin
+    declare luhn_number varchar(32);
+    
+    set luhn_number = substring(p_number, 1, length(p_number) - 1);
+    set luhn_number = concat(luhn_number, luhn(luhn_number));
+    
+    return luhn_number = p_number;
+end //
+
+delimiter ;

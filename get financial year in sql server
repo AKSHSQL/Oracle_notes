@@ -1,0 +1,20 @@
+
+-- select dbo.GetFinancialYear('date');
+
+
+CREATE FUNCTION dbo.GetFinancialYear (@input DATETIME)
+RETURNS VARCHAR(20)
+AS BEGIN
+    DECLARE @FinYear VARCHAR(20)
+
+    DECLARE @YearOfDate INT
+
+    IF (MONTH(@input) >= 11)
+        SET @YearOfDate = YEAR(@input)  
+    ELSE
+        SET @YearOfDate = YEAR(@input) - 1
+
+    SET @FinYear = RIGHT(CAST(@YearOfDate AS CHAR(4)), 2) + '-' + RIGHT(CAST((@YearOfDate + 1) AS CHAR(4)), 2)
+
+    RETURN @FinYear
+END

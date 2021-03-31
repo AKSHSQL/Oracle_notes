@@ -18,3 +18,18 @@ AS BEGIN
 
     RETURN @FinYear
 END
+
+--------------------------------------------------------------------------------------------------------------
+/* get dynamic financial year range*/
+
+DECLARE @MyDate DATETIME
+SET @MyDate = getDate()
+
+DECLARE @StartDate DATETIME
+DECLARE @EndDate DATETIME
+
+SET @StartDate = 
+DATEADD(dd,0, DATEDIFF(dd,0, DATEADD( mm, -(((12 + DATEPART(m, @MyDate)) - 4)%12), @MyDate ) - datePart(d,DATEADD( mm, -(((12 + DATEPART(m, @MyDate)) - 4)%12),@MyDate ))+1 ) )
+SET @EndDate = DATEADD(ss,-1,DATEADD(mm,12,@StartDate ));
+
+/* select * from table where date_column between @startdate and @enddate; */

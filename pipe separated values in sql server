@@ -1,0 +1,2 @@
+Select CAST(( SELECT  module_name +' | 'FROM dbo.module_master
+FOR XML PATH(''))as varchar(max)) as module_list where id

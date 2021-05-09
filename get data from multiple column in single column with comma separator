@@ -1,0 +1,11 @@
+sql server
+declare variables for each column
+ 
+if exists (select processing_currency_aud from table_name where processing_currency_aud ='Y')
+begin 
+set @aud ='AUD' 
+end;
+
+decalre @process_curr varchar(max)
+
+set @process_curr =(select STUFF(ISNULL(','+@aud,'')+ISNULL(','+@aud1,''),1,1,''));

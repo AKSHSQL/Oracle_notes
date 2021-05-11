@@ -1,0 +1,117 @@
+get values from multiple columns and put it into single columns comma separated
+
+
+/*		declare @sale varchar(15)
+        declare @upi varchar(15)
+        declare @cash_only varchar(15)
+        declare @sale_with_cash varchar(15)
+        declare @pre_auth varchar(15)
+        declare @tip varchar(15)
+        declare @bharat_qr varchar(15)
+        declare @payby_link varchar(15)
+        declare @payby_wallet varchar(15)
+        declare @micro_atm varchar(15)
+        declare @ipg_credit varchar(15)
+        declare @ipg_debit varchar(15)
+        declare @ipg_prepaid varchar(15)
+        declare @ipg_upi varchar(15)
+        declare @ipg_netbank varchar(15)
+        declare @ipg_bhqr varchar(15)
+        declare @inr varchar(5)
+        declare @usd varchar(5)
+        declare @eur varchar(5)
+        declare @gbp varchar(5)
+        declare @cad varchar(5)
+        declare @sgd varchar(5)
+        declare @aud varchar(5)
+        declare @cny varchar(5)
+        declare @myr varchar(5)
+        declare @thb varchar(5)
+
+        declare @terminal_profile varchar(max)
+        declare @process_curr varchar(max)
+        declare @ipg varchar(max)
+
+        declare @vista_user as table (sale char(1),cash_only char(1),sale_with_cash char(1),pre_auth char(1),tip char(1),upi char(1),bharat_qr char(1),
+        payby_link char(1) ,payby_wallet char(1),micro_atm char(1),channels_offered_credit_card char(1),channels_offered_debit_card char(1),
+        channels_offered_prepaid_card char(1),channels_offered_upi char(1),channels_offered_netbanking char(1),channels_offered_bharat_qr char(1),
+        processing_currency_inr char(1),processing_currency_usd char(1),processing_currency_eur char(1),processing_currency_gbp char(1),
+        processing_currency_cad char(1),processing_currency_sgd char(1),
+        processing_currency_aud char(1), processing_currency_cny char(1), 
+        processing_currency_myr char(1),processing_currency_thb char(1));
+   
+
+    insert into @vista_user select sale ,cash_only ,sale_with_cash ,pre_auth ,tip ,upi ,bharat_qr ,
+        payby_link  ,payby_wallet ,micro_atm ,channels_offered_credit_card ,channels_offered_debit_card ,
+        channels_offered_prepaid_card ,channels_offered_upi ,channels_offered_netbanking ,channels_offered_bharat_qr ,
+        processing_currency_inr ,processing_currency_usd ,processing_currency_eur ,processing_currency_gbp ,
+        processing_currency_cad ,processing_currency_sgd ,
+        processing_currency_aud , processing_currency_cny , 
+        processing_currency_myr ,processing_currency_thb  from vista_user_details 
+    where paynext_application_id=@paynext_app_id;
+
+    if exists (select  sale from @vista_user where sale='Y') begin set @sale='sale' end;
+
+    if exists (select upi from @vista_user  where upi='Y') begin set @upi='upi' end;
+
+    if exists (select cash_only from @vista_user  where cash_only='Y') begin set @cash_only ='cash_only' end;
+
+    if exists (select sale_with_cash from @vista_user  where sale_with_cash='Y') begin set @sale_with_cash ='sale_with_cash' end;
+
+    if exists (select pre_auth from @vista_user  where pre_auth='Y') begin set @pre_auth ='pre_auth' end;
+
+    if exists (select tip from @vista_user  where tip='Y') begin set @tip ='tip' end;
+
+    if exists (select bharat_qr from @vista_user  where bharat_qr='Y') begin set @bharat_qr ='bharat_qr' end;
+
+    if exists (select payby_link from @vista_user  where payby_link='Y') begin set @payby_link ='payby_link' end; 
+
+    if exists (select payby_wallet from @vista_user where payby_wallet='Y') begin set @payby_wallet ='payby_wallet' end;
+
+    if exists (select micro_atm from @vista_user  where micro_atm='Y') begin set @micro_atm ='micro_atm' end;
+     
+    if exists (select  channels_offered_credit_card  from @vista_user where channels_offered_credit_card ='Y') begin set @ipg_credit='Credit Card' end;
+
+    if exists (select  channels_offered_debit_card from @vista_user where channels_offered_debit_card='Y') begin set @ipg_debit='Debit Card' end;
+
+    if exists (select  channels_offered_prepaid_card from @vista_user where channels_offered_prepaid_card='Y') begin set @ipg_prepaid='Prepaid Card' end;
+
+    if exists (select  channels_offered_upi from @vista_user where channels_offered_upi='Y') begin set @ipg_upi='UPI' end;
+
+    if exists (select channels_offered_netbanking from @vista_user where channels_offered_netbanking='Y') begin set @ipg_netbank='Net Banking' end;
+
+    if exists (select  channels_offered_bharat_qr from @vista_user where channels_offered_bharat_qr='Y') begin set @ipg_bhqr='Bharat QR' end;
+    
+    if exists (select processing_currency_inr from @vista_user where processing_currency_inr ='Y') begin set @inr ='INR' end;
+
+    if exists (select processing_currency_usd from @vista_user where processing_currency_usd ='Y') begin set @usd ='USD' end;
+
+    if exists (select processing_currency_eur from @vista_user where processing_currency_eur ='Y') begin set @eur ='EUR' end;
+
+    if exists (select processing_currency_gbp from @vista_user where processing_currency_gbp ='Y') begin set @gbp ='GBP' end;
+
+    if exists (select processing_currency_cad from @vista_user where processing_currency_cad ='Y') begin set @cad ='CAD' end;
+
+    if exists (select processing_currency_sgd from @vista_user where processing_currency_sgd ='Y') begin set @sgd ='SGD' end;
+
+    if exists (select processing_currency_aud from @vista_user where processing_currency_aud ='Y') begin set @aud ='AUD' end;
+
+    if exists (select processing_currency_cny from @vista_user where processing_currency_cny ='Y') begin set @cny ='CNY' end;
+
+    if exists (select processing_currency_myr from @vista_user where processing_currency_myr ='Y') begin set @myr ='MYR' end;
+
+    if exists (select processing_currency_thb from @vista_user where processing_currency_thb ='Y') begin set @thb ='THB' end;
+
+    set @terminal_profile =(select STUFF(ISNULL(','+@sale,'')+ISNULL(','+@cash_only,'')+ISNULL(','+@sale_with_cash,'')+ISNULL(','+@pre_auth,'')+ISNULL(','+@tip,'')+ISNULL(','+@upi,'')+ISNULL(','+@bharat_qr,'')+ISNULL(','+@payby_link,'')+ISNULL(','+@payby_wallet,'')+ISNULL(','+@micro_atm,''),1,1,''));		
+
+    set @ipg=(select STUFF(ISNULL(','+@ipg_credit,'')+ISNULL(','+@ipg_debit,'')+ISNULL(','+@ipg_prepaid,'')+ISNULL(','+@ipg_upi,'')+ISNULL(','+@ipg_netbank,'')+ISNULL(','+@ipg_bhqr,''),1,1,''));
+    
+    set @process_curr =(select STUFF(ISNULL(','+@inr,'')+ISNULL(','+@usd,'')+ISNULL(','+@eur,'')+ISNULL(','+@gbp,'')+ISNULL(','+@cad,'')+ISNULL(','+@sgd,'')+ISNULL(','+@aud,'')+ISNULL(','+@cny,'')+ISNULL(','+@myr,'')+ISNULL(','+@thb,''),1,1,''));
+
+    SELECT bank_name, aggregator, tsp_switch,pos_or_ipg, existing_customer, merchant_legal_name, customer_id, dba_name, merchant_registered_address, merchant_pincode_zipcode, merchant_city, merchant_location, merchant_state, merchant_country, exstablishment_pan, merchant_grade, gst, number_of_stores, shop_and_est_reg_no, gst_number, email_id, mobile_number, alternative_contact_number, landline_number, website, return_url, business_owner_name, owner_residential_address, owner_country, owner_pincode, owner_location, owner_city, owner_state, owner_landmark, business_owner_mobile_number, business_owner_pan_number, settlement_currency, mode_of_payment, beneficiary_account_name, beneficiary_account_number, re_enter_benfeciary_account_number, beneficiary_ifsc_code, beneficiary_bank_name, iban_number, swift_code, business_registration_type, monthly_business_volume, nature_of_business, mcc, small_merchant, international_card_activation, international_mdr, activate_amex, amex_business_model, amex_se_number, debit_upto_2000_charge_type, debit_upto_2000_offus, debit_upto_2000_onus, debit_upto_2000_bharat_qr, debit_above_2000_upto_1lac_charge_type, debit_above_2000_upto_1lac_offus, debit_above_2000_upto_1lac_onus, debit_above_2000_upto_1lac_bharat_qr, debit_above_1lac_charge_type, debit_above_1lac_offus, debit_above_1lac_onus, debit_above_1lac_bharat_qr, credit_card_charge_type, credit_card_offus, credit_card_onus, credit_card_bharat_qr, prepaid_card_charge_type, prepaid_card_offus, prepaid_card_onus, prepaid_card_bharat_qr, amex_card_charge_type, amex_card_offus, amex_card_onus, amex_card_bharat_qr, omc_name, omc_type, fuel_dealer_code, fuel_reimbursement,@terminal_profile as terminal_profile, tip_percentage, credit_card, debit_card, prepaid,@ipg as channels_offer, setup_fees, annual_fees, monthly_fees, transaction_fees_credit_card, transaction_fees_debit_card, transaction_fees_prepaid_card, transaction_fees_wallet, transaction_fees_netbanking, transaction_fees_upi_bharat_qr, settlement_fees, refund_fees, chargeback_fees, declined_fees, rolling_reserve_for_credit_card, rolling_reserve_for_debit_card, rolling_reserve_for_prepaid_card, rolling_reserve_for_wallet, rolling_reserve_for_netbanking, rolling_reserve_for_upi_bqr,@process_curr as processing_currency, settlement_cycle_credit_card, settlement_cycle_debit_card, settlement_cycle_prepaid_card, settlement_cycle_wallet, settlement_cycle_netbanking, settlement_cycle_upi_bqr, gst_vat_application, gst_vat_value, deposit_amount, minimum_ticket_value, maximum_ticket_value, gateway, gateway_status, daily_transaction_limit, type_of_merchant, photo_id_proof, address_proof, bank_account_proof, business_id_proof, photo_id_proof_file, photo_id_proof_status, photo_id_proof_remarks, address_proof_file, address_proof_status, address_proof_remarks, bank_account_proof_file, bank_account_proof_status, bank_account_proof_remarks, business_id_proof_file, business_id_proof_status, business_id_proof_remarks, match_verfication, vmts_verification, merchant_sourcing_entity, agent_name, dsa_code, application, paynext_application_id,maker_submission_date, sub_nature_of_business, merchant_key, salt
+        ,vtd.product_type ,vtd.connectivity_type ,vtd.device_model ,vtd.number_of_terminal ,vtd.bqr_mobile_number 
+		FROM vista_user_details vud 
+        left join vista_terminal_details vtd on vtd.paynext_app_id=vud.paynext_application_id 
+        where vud.paynext_application_id =@paynext_app_id 
+*/
+

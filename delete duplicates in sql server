@@ -1,0 +1,15 @@
+WITH CTE(id,ifsc_code, bank_branch_name, payment_bank_name, D_flag,DuplicateCount)
+AS (SELECT id,ifsc_code, bank_branch_name, payment_bank_name, D_flag, 
+           ROW_NUMBER() OVER(PARTITION BY id,ifsc_code, bank_branch_name, payment_bank_name, D_flag
+           ORDER BY id) AS DuplicateCount
+    FROM mms_ifsc_master where payment_bank_name ='CAPITAL SMALL FINANCE BANK LIMITED' )
+    select * from cte;
+------------------------------------------------------------------------
+
+
+WITH CTE(id,ifsc_code, bank_branch_name, payment_bank_name, D_flag,DuplicateCount)
+AS (SELECT id,ifsc_code, bank_branch_name, payment_bank_name, D_flag, 
+           ROW_NUMBER() OVER(PARTITION BY id,ifsc_code, bank_branch_name, payment_bank_name, D_flag
+           ORDER BY id) AS DuplicateCount
+DELETE FROM CTE
+WHERE DuplicateCount > 1;
